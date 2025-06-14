@@ -1,0 +1,44 @@
+# version: '3.8'
+
+# version: '3.8'
+
+services:
+  nginx:
+    build: ./requirements/nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./home/wait-bab/data:/var/www/html
+    restart: always
+    networks:
+      - app-network
+    
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "--socket=/run/mysqld/mysqld.sock", "--silent"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 30s
+
+networks:
+  app-network:
+    name: app-network
+
+volumes:
+  db_data:
