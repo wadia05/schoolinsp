@@ -3,20 +3,22 @@ FROM debian:bookworm
 RUN apt update && \
     apt install -y \
         curl \
+        wget \
         mariadb-client \
         php \
-        php-pdo \
+        php-fpm \
         php-mysql \
-        php-zip \
-        php-gd \
         php-mbstring \
-        php-curl \
         php-xml \
-        php-pear \
-        php-bcmath \
-        php-opcache \
-        php-json \
-        php-cgi && \
+        php-curl \
+        php-zip \
+        php-gd && \
     rm -rf /var/lib/apt/lists/*
 
-CMD ["php-fpm7.4", "-F"]
+COPY ./install.sh /bin/install.sh
+
+RUN chmod +x /bin/install.sh && \
+    /bin/install.sh
+
+# Find the correct PHP-FPM version
+CMD ["php-fpm8.2", "-F"]

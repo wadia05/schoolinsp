@@ -6,10 +6,12 @@ services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
+    depends_on:
+      - wordpress
     ports:
       - "443:443"
     volumes:
-      - ./home/wait-bab/data:/var/www/html
+      - ./home/mole_pc/Desktop/schoolinsp/data/WordPress:/var/www/WordPress
     restart: always
     networks:
       - app-network
@@ -35,6 +37,33 @@ services:
     #   timeout: 5s
     #   retries: 5
     #   start_period: 30s
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASS}
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      WP_TITLE: ${WP_TITLE}
+      WP_ADMIN_N: ${WP_ADMIN_N}
+      WP_ADMIN_P: ${WP_ADMIN_P}
+      WP_ADMIN_E: ${WP_ADMIN_E}
+      WP_U_NAME: ${WP_U_NAME}
+      WP_U_PASS: ${WP_U_PASS}
+      WP_U_EMAIL: ${WP_U_EMAIL}
+      WP_U_ROLE: ${WP_U_ROLE}
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./home/mole_pc/Desktop/schoolinsp/data/WordPress:/var/www/WordPress
+    restart: always
+    networks:
+      - app-network
 
 networks:
   app-network:
