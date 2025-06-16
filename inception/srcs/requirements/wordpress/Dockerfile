@@ -1,24 +1,35 @@
 FROM debian:bookworm
 
-RUN apt update && \
-    apt install -y \
-        curl \
-        wget \
-        mariadb-client \
-        php \
-        php-fpm \
-        php-mysql \
-        php-mbstring \
-        php-xml \
-        php-curl \
-        php-zip \
-        php-gd && \
-    rm -rf /var/lib/apt/lists/*
+# Install PHP and required packages
+RUN apt update && apt install -y \
+    php8.2 \
+    php8.2-fpm \
+    php8.2-mysql \
+    php8.2-gd \
+    php8.2-curl \
+    php8.2-mbstring \
+    php8.2-xml \
+    php8.2-zip \
+    curl \
+    mariadb-client \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY ./install.sh /bin/install.sh
+# Copy scripts
+COPY install.sh /bin/install.sh
+COPY entrypoint.sh /bin/entrypoint.sh
 
-RUN chmod +x /bin/install.sh && \
+# Make scripts executable and run install
+RUN chmod +x /bin/install.sh /bin/entrypoint.sh && \
     /bin/install.sh
 
-# Find the correct PHP-FPM version
-CMD ["php-fpm8.2", "-F"]
+# Configure PHP-FPM
+RUN sed -i 's/listen = \/run\/php\/php8.2-fpm.sock/listen = 9000/' /etc/php/8.2/fpm/pool.d/www.conf
+
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Use entrypoint script
+ENTRYPOINT ["/bin/entrypoint.sh"]

@@ -1,17 +1,15 @@
 # version: '3.8'
 
-# version: '3.8'
-
 services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
-    depends_on:
-      - wordpress
+    # depends_on:
+    #   - wordpress
     ports:
       - "443:443"
     volumes:
-      - ./home/mole_pc/Desktop/schoolinsp/data/WordPress:/var/www/WordPress
+      - wordpress_data:/var/www/html
     restart: always
     networks:
       - app-network
@@ -60,7 +58,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - ./home/mole_pc/Desktop/schoolinsp/data/WordPress:/var/www/WordPress
+      - wordpress_data:/var/www/html
     restart: always
     networks:
       - app-network
@@ -71,3 +69,4 @@ networks:
 
 volumes:
   db_data:
+  wordpress_data:
