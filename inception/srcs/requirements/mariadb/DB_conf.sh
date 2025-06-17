@@ -39,5 +39,9 @@ EOF
 
 echo "Database configuration completed successfully!"
 
+# service mariadb stop
 # Keep MariaDB running in foreground
-wait $MYSQLD_PID
+mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
+mysqld_safe
+# mysqld_safe --user=mysql --datadir=/var/lib/mysql  
+# wait $MYSQLD_PID

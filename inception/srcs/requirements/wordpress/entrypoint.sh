@@ -6,6 +6,7 @@
 #     echo "Database not ready yet. Waiting..."
 #     sleep 2
 # done
+sleep 4
 wp core download --allow-root
 echo "Database is ready. Configuring WordPress..."
 

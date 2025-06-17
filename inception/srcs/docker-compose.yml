@@ -3,27 +3,27 @@
 services:
   nginx:
     build: ./requirements/nginx
+    image: nginx:1.0
     container_name: nginx
     # depends_on:
     #   - wordpress
     ports:
       - "443:443"
     volumes:
-      - wordpress_data:/var/www/html
+      - /home/wait-bab/data/wordpress_data:/var/www/html
     restart: always
     networks:
       - app-network
     
   mariadb:
     build: ./requirements/mariadb
+    image: mariadb:1.0
     container_name: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
-    ports:
-      - "3306:3306"
     restart: always
     volumes:
       - db_data:/var/lib/mysql
@@ -38,6 +38,7 @@ services:
 
   wordpress:
     build: ./requirements/wordpress
+    image: wordpress:1.0
     container_name: wordpress
     depends_on:
       - mariadb
@@ -55,10 +56,8 @@ services:
       WP_U_PASS: ${WP_U_PASS}
       WP_U_EMAIL: ${WP_U_EMAIL}
       WP_U_ROLE: ${WP_U_ROLE}
-    ports:
-      - "9000:9000"
     volumes:
-      - wordpress_data:/var/www/html
+      - /home/wait-bab/data/wordpress_data:/var/www/html
     restart: always
     networks:
       - app-network

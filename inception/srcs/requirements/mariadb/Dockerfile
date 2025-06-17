@@ -9,7 +9,7 @@ COPY ./DB_conf.sh  /bin/DB_conf.sh
 
 RUN chmod +x /bin/DB_conf.sh
 
-# EXPOSE 3306
+EXPOSE 3306
 
 ENTRYPOINT [ "/bin/DB_conf.sh" ]
 # CMD ["/bin/DB_conf.sh"]
