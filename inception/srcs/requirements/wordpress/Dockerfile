@@ -15,8 +15,8 @@ RUN apt update && apt install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy scripts
-COPY install.sh /bin/install.sh
-COPY entrypoint.sh /bin/entrypoint.sh
+COPY ./tools/install.sh /bin/install.sh
+COPY ./tools/entrypoint.sh /bin/entrypoint.sh
 
 # Make scripts executable and run install
 RUN chmod +x /bin/install.sh /bin/entrypoint.sh && \

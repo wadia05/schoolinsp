@@ -1,25 +1,17 @@
 #!/bin/bash
 
-# Wait for database to be ready
-# echo "Waiting for database to be ready..."
-# while ! mysqladmin ping -h"$WORDPRESS_DB_HOST" -u"$WORDPRESS_DB_USER" -p"$WORDPRESS_DB_PASSWORD" --silent; do
-#     echo "Database not ready yet. Waiting..."
-#     sleep 2
-# done
 sleep 4
 wp core download --allow-root
 echo "Database is ready. Configuring WordPress..."
-
-# cd /var/www/html
 
 # Check if wp-config.php already exists
 if [ ! -f wp-config.php ]; then
     echo "Creating wp-config.php..."
     wp config create \
-        --dbname="$WORDPRESS_DB_NAME" \
-        --dbuser="$WORDPRESS_DB_USER" \
-        --dbpass="$WORDPRESS_DB_PASSWORD" \
-        --dbhost="$WORDPRESS_DB_HOST" \
+        --dbname="$DB_NAME" \
+        --dbuser="$DB_USER" \
+        --dbpass="$DB_PASS" \
+        --dbhost="mariadb:3306" \
         --allow-root
 fi
 
